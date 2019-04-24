@@ -4,21 +4,19 @@ import 'package:test/test.dart';
 
 void main() {
   test('loading of css', () {
-    String willNotLoadClass = 'will-not-load-class';
-    String willLoadClass = 'will-load-class';
-    final willNotLoadCss = document.createElement('div')..className = willNotLoadClass;
-    final willLoadCss = document.createElement('div')..className = willLoadClass;
+    final willLoadElement = document.createElement('div')..className = 'will-load-class';
+    final willLoadBuiltElement = document.createElement('div')..className = 'will-load-built-class';
+    final willNotLoadBuiltElement = document.createElement('div')..className = 'will-not-load-built-class';
 
-    document.body.append(willNotLoadCss);
-    document.body.append(willLoadCss);
+    document.body.append(willLoadElement);
+    document.body.append(willLoadBuiltElement);
+    document.body.append(willNotLoadBuiltElement);
 
-    print(document.querySelector('.$willNotLoadClass').styleMap);
-    print(document.querySelector('.$willLoadClass').styleMap);
-//
-//    print(willNotLoadCss.classes);
-//    print(willNotLoadCss.styleMap);
-//    print(willNotLoadCss.style.color);
-//    print(willLoadCss.style.color);
-//    print(willLoadCss.styleMap);
+    // Will pass
+    expect(willLoadElement.getComputedStyle().fontSize, '1px');
+    // Will pass
+    expect(willLoadBuiltElement.getComputedStyle().fontSize, '1px');
+    // Will not pass because css file cannot be found
+    expect(willNotLoadBuiltElement.getComputedStyle().fontSize, '1px');
   });
 }
